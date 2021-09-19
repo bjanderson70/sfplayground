@@ -1,0 +1,21 @@
+{
+    "orgName": "Misc CI/CD with sfpowerscript",
+    "edition": "Developer",
+    "hasSampleData": false,
+    "features": ["EnableSetPasswordInApi"],
+    "settings": {
+        "lightningExperienceSettings": {
+            "enableS1DesktopEnabled": true
+        },
+        "mobileSettings": {
+            "enableS1EncryptedStoragePref2": false
+        },
+        "pathAssistantSettings": {
+            "pathAssistantEnabled": true
+        },
+        "userEngagementSettings": {
+            "enableOrchestrationInSandbox": true,
+            "enableShowSalesforceUserAssist": false
+        }
+    }
+}

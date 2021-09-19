@@ -1,0 +1,14 @@
+{
+    "objects": [
+        {
+            "query": "select name,AccountSource,Annual_Income__c,AnnualRevenue,type,industry,BillingAddress,ShippingAddress from account",
+            "operation": "Readonly",
+            "externalId": "Name"
+        },
+        {
+            "query": "select Birthdate,description,email,department,HomePhone,firstname,lastname,phone,title from contact",
+            "operation": "Readonly",
+            "externalId": "Email"
+        }
+    ]
+}

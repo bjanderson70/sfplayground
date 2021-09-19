@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+    <testsuite name="force.apex" timestamp="2021-09-09T19:47:54.000Z" hostname="https://speed-business-3030.cs10.my.salesforce.com" tests="54" failures="0"  errors="0"  time="2.57">
+        <properties>
+            <property name="outcome" value="Successful"/>
+            <property name="testsRan" value="54"/>
+            <property name="passing" value="54"/>
+            <property name="failing" value="0"/>
+            <property name="skipped" value="0"/>
+            <property name="passRate" value="100%"/>
+            <property name="failRate" value="0%"/>
+            <property name="testStartTime" value="Thu Sep 09 2021 3:47:54 PM"/>
+            <property name="testExecutionTime" value="2.57 s"/>
+            <property name="testTotalTime" value="2.57 s"/>
+            <property name="commandTime" value="0.40 s"/>
+            <property name="hostname" value="https://speed-business-3030.cs10.my.salesforce.com"/>
+            <property name="orgId" value="00DJ0000003nEmJMAU"/>
+            <property name="username" value="test-1i0s7jogg1tc@example.com"/>
+            <property name="testRunId" value="707J000001pIYIG"/>
+            <property name="userId" value="005J000000CZfVcIAL"/>
+            <property name="coveredLines" value="565"/>
+            <property name="testRunCoverage" value="88%"/>
+            <property name="orgWideCoverage" value="83%"/>
+        </properties>
+        <testcase name="ctorTest" classname="cqrs_CommandHandlerTest" time="0.02">
+        </testcase>
+        <testcase name="handleTest" classname="cqrs_CommandHandlerTest" time="0.05">
+        </testcase>
+        <testcase name="logTest" classname="cqrs_CommandHandlerTest" time="0.01">
+        </testcase>
+        <testcase name="retrieveTest" classname="cqrs_CommandHandlerTest" time="0.01">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_AccountTypeRecordsDTOTest" time="0.02">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_AuthenticationCommandTest" time="0.04">
+        </testcase>
+        <testcase name="getterSetterTest" classname="cqrs_AuthenticationCommandTest" time="0.01">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_QueryDispatcherTest" time="0.02">
+        </testcase>
+        <testcase name="dispatchTest" classname="cqrs_QueryDispatcherTest" time="0.16">
+        </testcase>
+        <testcase name="cqrsListByLabelTest" classname="cqrs_ResolverTest" time="0.26">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_ResolverTest" time="0.09">
+        </testcase>
+        <testcase name="findCQHandlerNameByCQNameTest" classname="cqrs_ResolverTest" time="0.08">
+        </testcase>
+        <testcase name="getCommandChainTest" classname="cqrs_ResolverTest" time="0.09">
+        </testcase>
+        <testcase name="getCommandHandlerTest" classname="cqrs_ResolverTest" time="0.08">
+        </testcase>
+        <testcase name="getQueryChainTest" classname="cqrs_ResolverTest" time="0.08">
+        </testcase>
+        <testcase name="getQueryHandlerTest" classname="cqrs_ResolverTest" time="0.07">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_ResultTest" time="0.03">
+        </testcase>
+        <testcase name="ctorWithBooleanAndExceptionTest" classname="cqrs_ResultTest" time="0.01">
+        </testcase>
+        <testcase name="ctorWithExceptionTest" classname="cqrs_ResultTest" time="0.01">
+        </testcase>
+        <testcase name="ctorWithNegativeSuccessTest" classname="cqrs_ResultTest" time="0.01">
+        </testcase>
+        <testcase name="ensureCorrectHandlerNameTest" classname="cqrs_HandlerResolverBaseTest" time="0.17">
+        </testcase>
+        <testcase name="getResolverTest" classname="cqrs_HandlerResolverBaseTest" time="0.08">
+        </testcase>
+        <testcase name="resolveTest" classname="cqrs_HandlerResolverBaseTest" time="0.12">
+        </testcase>
+        <testcase name="defaultCtorTest" classname="cqrs_CommandResultTest" time="0.10">
+        </testcase>
+        <testcase name="defaultMethodsTest" classname="cqrs_CommandResultTest" time="0.01">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_QueryHandlerTest" time="0.02">
+        </testcase>
+        <testcase name="handleTest" classname="cqrs_QueryHandlerTest" time="0.03">
+        </testcase>
+        <testcase name="logTest" classname="cqrs_QueryHandlerTest" time="0.01">
+        </testcase>
+        <testcase name="retrieveTest" classname="cqrs_QueryHandlerTest" time="0.01">
+        </testcase>
+        <testcase name="defaultCtorTest" classname="cqrs_QueryResultTest" time="0.03">
+        </testcase>
+        <testcase name="defaultMethodsTest" classname="cqrs_QueryResultTest" time="0.01">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_GetAccountByTypeQueryHandlerTest" time="0.02">
+        </testcase>
+        <testcase name="handleTest" classname="cqrs_GetAccountByTypeQueryHandlerTest" time="0.15">
+        </testcase>
+        <testcase name="logTest" classname="cqrs_GetAccountByTypeQueryHandlerTest" time="0.01">
+        </testcase>
+        <testcase name="retrieveTest" classname="cqrs_GetAccountByTypeQueryHandlerTest" time="0.09">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_BaseCommandTest" time="0.05">
+        </testcase>
+        <testcase name="ctorWithUserContextAndEnvironmentTest" classname="cqrs_BaseCommandTest" time="0.01">
+        </testcase>
+        <testcase name="ctorWithUserContextTest" classname="cqrs_BaseCommandTest" time="0.01">
+        </testcase>
+        <testcase name="ctorTest" classname="util_MetadataReaderTest" time="0.07">
+        </testcase>
+        <testcase name="processTest" classname="util_MetadataReaderTest" time="0.08">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_CommandDispatcherTest" time="0.02">
+        </testcase>
+        <testcase name="dispatchTest" classname="cqrs_CommandDispatcherTest" time="0.14">
+        </testcase>
+        <testcase name="ctorTest" classname="util_UserContextTest" time="0.02">
+        </testcase>
+        <testcase name="setterTest" classname="util_UserContextTest" time="0.01">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_BaseQueryTest" time="0.03">
+        </testcase>
+        <testcase name="ctorWithUserContextAndEnvironmentTest" classname="cqrs_BaseQueryTest" time="0.01">
+        </testcase>
+        <testcase name="ctorWithUserContextTest" classname="cqrs_BaseQueryTest" time="0.01">
+        </testcase>
+        <testcase name="handleMethodTest" classname="cqrs_AuthenticationCommandHandlerTest" time="0.03">
+        </testcase>
+        <testcase name="isSandboxTest" classname="util_MiscHelpersTest" time="0.02">
+        </testcase>
+        <testcase name="miscMethodTest" classname="util_MiscHelpersTest" time="0.01">
+        </testcase>
+        <testcase name="ctorTest" classname="cqrs_BaseServiceTest" time="0.04">
+        </testcase>
+        <testcase name="ctorWithUserContextAndEnvironmentTest" classname="cqrs_BaseServiceTest" time="0.01">
+        </testcase>
+        <testcase name="ctorWithUserContextTest" classname="cqrs_BaseServiceTest" time="0.01">
+        </testcase>
+        <testcase name="removeUnderscoreTest" classname="util_StringsTest" time="0.03">
+        </testcase>
+    </testsuite>
+</testsuites>
