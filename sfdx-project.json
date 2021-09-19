@@ -14,8 +14,8 @@
             "ignoreOnStage": ["prepare", "validate", "quickbuild", "build"]
         },
         {
-            "path": "./src/core",
-            "package": "core",
+            "path": "./src/core-crm",
+            "package": "core-crm",
             "versionNumber": "1.0.0.0",
             "versionNumber": "1.0.0.0",
             "default": false,

@@ -1,8 +1,8 @@
 {
-    "name": "easy-spaces-lwc",
+    "name": "sfplayground",
     "private": true,
     "version": "1.0.0",
-    "description": "Easy Spaces Sample App - Lightning Web Components",
+    "description": "SF Playground",
     "scripts": {
         "lint": "npm run lint:lwc && npm run lint:aura",
         "lint:lwc": "eslint **/lwc/**",
@@ -17,11 +17,6 @@
         "postinstall": "node bin/check-version.js"
     },
     "author": "salesforce.com",
-    "license": "CC0-1.0",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/trailheadapps/easy-spaces-lwc"
-    },
     "engines": {
         "node": ">= 10.13.0",
         "npm": ">= 6.5.0"

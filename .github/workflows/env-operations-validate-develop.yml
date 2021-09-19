@@ -1,13 +1,25 @@
-# Unique name for this workflow
-name: sfpowerscripts validate
+# DX@Scale CI/CD Template for GitHub
+#----------------------------------------------------------------------------------------------------
+# Maintained by @aly76 for DX@Scale
+# Follows reference pipeline available at docs.dxatscale.io
+#
+#-----------------------------------------------------------------------------------------------------
+# To know more about dxatscale, visit https://docs.dxatscale.io
+# To know more on sfpowerscripts, visit- https://sfpowerscripts.dxatscale.io/
+# To know more on sfpowerkit, visit- https://github.com/Accenture/sfpowerkit
 
-# Definition when the workflow should run
+# This pipeline is used to validate an incoming change using a dev environment fetched from the CI pool
+
+name: 'PR Validation - Auto Triggered'
+
 on:
-    workflow_dispatch:
     pull_request:
         types: [opened, synchronize, reopened]
         branches:
             - develop
+            - feature/**
+
+    workflow_dispatch:
 
 #Set the environment variables for tracking metrics
 env:
@@ -16,19 +28,20 @@ env:
     SFPOWERSCRIPTS_STATSD_PORT: '8125'
     SFPOWERSCRIPTS_STATSD_PROTOCOL: 'UDP'
 
-# Jobs to be executed
 jobs:
     validate:
+        name: 'Validate Changed Packages'
         runs-on: ubuntu-latest
         container: dxatscale/sfpowerscripts
+
         steps:
-            # Checkout the code in the pull request
-            - name: 'Checkout source code'
-              uses: actions/checkout@v2
+            - uses: actions/checkout@v2
               with:
                   fetch-depth: 0
 
-            # Copy Dev Hub server key to file
+            - run: |
+                  echo 'y' | sfdx plugins:install @dxatscale/sfpowerscripts@alpha
+
             - name: 'Authenticate Dev Hub'
               run: |
                   echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
@@ -36,10 +49,32 @@ jobs:
 
             # Validate source and trigger test
             - name: 'Push source to scratch org'
-              run: 'sfdx sfpowerscripts:orchestrator:validate -f ./authfile  -p ci -u  devhub -x'
+              run: 'sfdx sfpowerscripts:orchestrator:validate -p ci -v devhub -x'
 
-            # Upload code coverage data
-            - name: 'Upload code coverage for Apex to Codecov.io'
-              uses: codecov/codecov-action@v1
+    static:
+        name: 'static-analysis-of-Apex-classes-using-PMD'
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
+        steps:
+            - uses: actions/checkout@v2
               with:
-                  flags: Apex
+                  fetch-depth: 0
+
+            - name: 'Run PMD static code analysis'
+              shell: bash
+              run: |
+                  sfdx sfpowerscripts:analyze:pmd -b --sourcedir=src/core-crm -o core-crm-pmd-output
+
+    validate-package-coverage:
+        name: 'validate metadata coverage for unlocked packages'
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+
+            - name: 'validate metadata coverage'
+              shell: bash
+              run: |
+                  sfdx sfpowerkit:package:valid -n core-crm -b StandardValueSet
