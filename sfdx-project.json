@@ -27,7 +27,7 @@
             "package": "cqrs-service",
             "versionName": "version 1.0.0",
             "versionNumber": "1.0.0.0",
-            "default": true,
+            "default": false,
             "skipCoverageValidation": false,
             "skipTesting": false,
             "isOptimizedDeployment": true,
@@ -63,7 +63,7 @@
             "package": "src-temp",
             "versionName": "version 1.0.0",
             "versionNumber": "1.0.0.0",
-            "default": false,
+            "default": true,
             "ignoreOnStage": ["prepare", "validate", "quickbuild", "build"]
         }
     ],

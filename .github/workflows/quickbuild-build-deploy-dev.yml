@@ -1,13 +1,4 @@
-# DX@Scale CI/CD Template for GitHub
-#----------------------------------------------------------------------------------------------------
-# Maintained by @aly76 for DX@Scale
-# Follows reference pipeline available at docs.dxatscale.io
 #
-#-----------------------------------------------------------------------------------------------------
-# To know more about dxatscale, visit https://docs.dxatscale.io
-# To know more on sfpowerscripts, visit- https://sfpowerscripts.dxatscale.io/
-# To know more on sfpowerkit, visit- https://github.com/Accenture/sfpowerkit
-
 # This pipeline quickbuilds, deploy to DEV, builds and publishes packages to artifact repository
 
 name: 'CI Pipeline [Develop Branch] - Auto Triggered'
@@ -45,7 +36,7 @@ jobs:
             - name: 'Create packages'
               id: sfpowerscripts-build
               run: |
-                  sfdx sfpowerscripts:orchestrator:quickbuild -v devhub --diffcheck --buildnumber ${GITHUB_RUN_ID} --branch ${GITHUB_REF#refs/heads/} --waittime=30
+                  sfdx sfpowerscripts:orchestrator:quickbuild -v devhub --diffcheck --buildnumber ${GITHUB_RUN_ID} --branch ${GITHUB_REF#refs/heads/}
 
             # Publish artifacts
             - uses: actions/upload-artifact@v2
