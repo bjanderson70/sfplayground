@@ -2,7 +2,7 @@
 #----------------------------------------------------------------------------------------------------
 # Maintained by @aly76 for DX@Scale
 # Follows reference pipeline available at docs.dxatscale.io
-# 
+#
 #-----------------------------------------------------------------------------------------------------
 # To know more about dxatscale, visit https://docs.dxatscale.io
 # To know more on sfpowerscripts, visit- https://sfpowerscripts.dxatscale.io/
@@ -12,124 +12,117 @@
 
 name: 'CI Pipeline - Auto Triggered'
 
-
 on:
-  push:
-    branches:
-      - main
-      - release/**
+    push:
+        branches:
+            - main
+            - release/**
 
-
-  workflow_dispatch:
-
-
+    workflow_dispatch:
 
 #Set the environment variables for tracking metrics
 env:
-  SFPOWERSCRIPTS_STATSD: 'true'
-  SFPOWERSCRIPTS_STATSD_HOST: '127.0.0.1' 
-  SFPOWERSCRIPTS_STATSD_PORT: '8125' 
-  SFPOWERSCRIPTS_STATSD_PROTOCOL: 'UDP'
+    SFPOWERSCRIPTS_STATSD: 'true'
+    SFPOWERSCRIPTS_STATSD_HOST: '127.0.0.1'
+    SFPOWERSCRIPTS_STATSD_PORT: '8125'
+    SFPOWERSCRIPTS_STATSD_PROTOCOL: 'UDP'
 
 jobs:
-  quickbuild:
-    name: 'Quickbuild packages'
-    runs-on: ubuntu-latest
-    container: dxatscale/sfpowerscripts
-    if: github.ref == 'refs/heads/main' 
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+    quickbuild:
+        name: 'Quickbuild packages'
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
+        if: github.ref == 'refs/heads/main'
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
 
-      - name: 'Authenticate Dev Hub'
-        run: |
-          echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
-          sfdx auth:sfdxurl:store -f authfile -a devhub
+            - name: 'Authenticate Dev Hub'
+              run: |
+                  echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
+                  sfdx auth:sfdxurl:store -f authfile -a devhub
 
-      - name: 'Create packages'
-        id: sfpowerscripts-build
-        run: |
-          sfdx sfpowerscripts:orchestrator:quickbuild -v devhub --diffcheck --buildnumber ${GITHUB_RUN_ID} --branch ${GITHUB_REF#refs/heads/}
+            - name: 'Create packages'
+              id: sfpowerscripts-build
+              run: |
+                  sfdx sfpowerscripts:orchestrator:quickbuild -v devhub --diffcheck --buildnumber ${GITHUB_RUN_ID} --branch ${GITHUB_REF#refs/heads/}
 
-      # Publish artifacts
-      - uses: actions/upload-artifact@v2
-        with:
-          name: quickbuild-artifacts
-          path: artifacts
+            # Publish artifacts
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: quickbuild-artifacts
+                  path: artifacts
 
-  deploy:
-    name: 'Deploy to Dev'
-    runs-on: ubuntu-latest
-    container: dxatscale/sfpowerscripts
-    needs: quickbuild
-    if: github.ref == 'refs/heads/main'
-    environment:
-      name: DEV
-    concurrency: dev
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+    deploy:
+        name: 'Deploy to Dev'
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
+        needs: quickbuild
+        if: github.ref == 'refs/heads/main'
+        environment:
+            name: DEV
+        concurrency: dev
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
 
-      - uses: actions/download-artifact@v2
-        with:
-             name: quickbuild-artifacts
-             path: artifacts 
+            - uses: actions/download-artifact@v2
+              with:
+                  name: quickbuild-artifacts
+                  path: artifacts
 
-      - name:  'Authenticate Dev Hub'
-        run: |
-          echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
-          sfdx auth:sfdxurl:store -f authfile -a devhub
+            - name: 'Authenticate Dev Hub'
+              run: |
+                  echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
+                  sfdx auth:sfdxurl:store -f authfile -a devhub
 
-      - name: Authenticate to DEV sandbox
-        run: |
-          echo "${{ secrets.DEV_SFDX_AUTH_URL }}" > ./dev_authfile
-          sfdx auth:sfdxurl:store -f ./dev_authfile -a dev
+            - name: Authenticate to DEV sandbox
+              run: |
+                  echo "${{ secrets.DEV_SFDX_AUTH_URL }}" > ./dev_authfile
+                  sfdx auth:sfdxurl:store -f ./dev_authfile -a dev
 
-      - name: 'Deploy to DEV'
-        run: |
-          sfdx sfpowerkit:package:dependencies:install -u dev -v devhub -w 300 -r
-          sfdx sfpowerscripts:orchestrator:deploy -u dev  --skipifalreadyinstalled -g "::group::,::endgroup::" --waittime=300
+            - name: 'Deploy to DEV'
+              run: |
+                  sfdx sfpowerkit:package:dependencies:install -u dev -v devhub -w 300 -r
+                  sfdx sfpowerscripts:orchestrator:deploy -u dev  --skipifalreadyinstalled -g "::group::,::endgroup::" --waittime=30
 
-  buildAndPublish:
-    name: 'Build and Publish'
-    runs-on: ubuntu-latest
-    container: dxatscale/sfpowerscripts
-    needs: deploy
-    concurrency: build 
-    if: github.ref == 'refs/heads/main' || 'refs/heads/release/*'
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+    buildAndPublish:
+        name: 'Build and Publish'
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
+        needs: deploy
+        concurrency: build
+        if: github.ref == 'refs/heads/main' || 'refs/heads/release/*'
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
 
-      - name: 'Authenticate Dev Hub'
-        run: |
-          echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
-          sfdx auth:sfdxurl:store -f authfile -a devhub
+            - name: 'Authenticate Dev Hub'
+              run: |
+                  echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
+                  sfdx auth:sfdxurl:store -f authfile -a devhub
 
-      - name: 'Create packages'
-        id: sfpowerscripts-build
-        run: |
-          sfdx sfpowerscripts:orchestrator:build -v devhub --diffcheck --branch ${GITHUB_REF#refs/heads/} --buildnumber ${GITHUB_RUN_ID} --waittime=300
+            - name: 'Create packages'
+              id: sfpowerscripts-build
+              run: |
+                  sfdx sfpowerscripts:orchestrator:build -v devhub --diffcheck --branch ${GITHUB_REF#refs/heads/} --buildnumber ${GITHUB_RUN_ID} --waittime=30
 
-      # Publish artifacts
-      - uses: actions/upload-artifact@v2
-        with:
-          name: build-artifacts
-          path: artifacts
+            # Publish artifacts
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: build-artifacts
+                  path: artifacts
 
-      - name: Authenticate to NPM registry
-        run: |
-           echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" > ~/.npmrc
-           echo  "_authToken=${AUTH_TOKEN}" >> ~/.npmrc
-        env:
-          AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+            - name: Authenticate to NPM registry
+              run: |
+                  echo "@${{ github.repository_owner }}:registry=https://npm.pkg.github.com" > ~/.npmrc
+                  echo  "_authToken=${AUTH_TOKEN}" >> ~/.npmrc
+              env:
+                  AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish
-        run: |
-          sfdx sfpowerscripts:orchestrator:publish -d artifacts --npm --scope @${{ github.repository_owner }}  --gittag --pushgittag
-
-
+            - name: Publish
+              run: |
+                  sfdx sfpowerscripts:orchestrator:publish -d artifacts --npm --scope @${{ github.repository_owner }}  --gittag --pushgittag
