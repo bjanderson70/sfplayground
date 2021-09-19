@@ -6,6 +6,7 @@ package.xml
 src-env-specific-alias-post/**
 src-env-specific-alias-pre/**
 src-env-specific-pre/**
+src-env-specific/**
 README.md
 
 **appMenu

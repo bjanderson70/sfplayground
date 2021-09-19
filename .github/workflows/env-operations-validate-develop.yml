@@ -1,0 +1,45 @@
+# Unique name for this workflow
+name: sfpowerscripts validate
+
+# Definition when the workflow should run
+on:
+    workflow_dispatch:
+    pull_request:
+        types: [opened, synchronize, reopened]
+        branches:
+            - develop
+
+#Set the environment variables for tracking metrics
+env:
+    SFPOWERSCRIPTS_STATSD: 'true'
+    SFPOWERSCRIPTS_STATSD_HOST: '127.0.0.1'
+    SFPOWERSCRIPTS_STATSD_PORT: '8125'
+    SFPOWERSCRIPTS_STATSD_PROTOCOL: 'UDP'
+
+# Jobs to be executed
+jobs:
+    validate:
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
+        steps:
+            # Checkout the code in the pull request
+            - name: 'Checkout source code'
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+
+            # Copy Dev Hub server key to file
+            - name: 'Authenticate Dev Hub'
+              run: |
+                  echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
+                  sfdx auth:sfdxurl:store -f authfile -a devhub
+
+            # Validate source and trigger test
+            - name: 'Push source to scratch org'
+              run: 'sfdx sfpowerscripts:orchestrator:validate -f ./authfile  -p ci -u  devhub -x'
+
+            # Upload code coverage data
+            - name: 'Upload code coverage for Apex to Codecov.io'
+              uses: codecov/codecov-action@v1
+              with:
+                  flags: Apex
