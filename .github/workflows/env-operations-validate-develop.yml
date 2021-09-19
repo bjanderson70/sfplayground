@@ -3,7 +3,7 @@
 # Maintained by
 #-----------------------------------------------------------------------------------------------------
 
-# This pipeline is used to validate an incoming change using a dev environment fetched from the CI pool
+# This pipeline is used to validate an incoming change using a scratch org (ci) environment fetched from the CI pool
 
 name: 'PR Validation - Auto Triggered'
 
@@ -58,7 +58,7 @@ jobs:
             - name: 'Run PMD static code analysis'
               shell: bash
               run: |
-                  sfdx sfpowerscripts:analyze:pmd -b --sourcedir=src/core-crm -o core-crm-pmd-output
+                  sfdx sfpowerscripts:analyze:pmd -b --sourcedir=src -o src-output
 
     validate-package-coverage:
         name: 'validate metadata coverage for unlocked packages'
