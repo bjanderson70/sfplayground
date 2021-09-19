@@ -1,43 +1,36 @@
-# DX@Scale CI/CD Template for GitHub
+#
 #----------------------------------------------------------------------------------------------------
-# Maintained by @aly76 for DX@Scale
-# Follows reference pipeline available at docs.dxatscale.io
-# 
+# Maintained by
 #-----------------------------------------------------------------------------------------------------
-# To know more about dxatscale, visit https://docs.dxatscale.io
-# To know more on sfpowerscripts, visit- https://sfpowerscripts.dxatscale.io/
-# To know more on sfpowerkit, visit- https://github.com/Accenture/sfpowerkit
 
 # This pipeline publishes metrics about scratch orgs to Monitoring tool every 30 minutes
 
 name: 'Publish Metrics for Scratch Org Pools'
 
 on:
-  workflow_dispatch:
-  schedule:
-    # Every 30 minutes
-    - cron: '30 * * * *'
+    workflow_dispatch:
+    schedule:
+        # Every 30 minutes
+        - cron: '30 * * * *'
 
 #Set the environment variables for tracking metrics
 env:
-  SFPOWERSCRIPTS_STATSD: 'true'
-  SFPOWERSCRIPTS_STATSD_HOST: '127.0.0.1' 
-  SFPOWERSCRIPTS_STATSD_PORT: '8125' 
-  SFPOWERSCRIPTS_STATSD_PROTOCOL: 'UDP'
+    SFPOWERSCRIPTS_STATSD: 'true'
+    SFPOWERSCRIPTS_STATSD_HOST: '127.0.0.1'
+    SFPOWERSCRIPTS_STATSD_PORT: '8125'
+    SFPOWERSCRIPTS_STATSD_PROTOCOL: 'UDP'
 
 jobs:
+    publish:
+        name: 'Publish Metrics'
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
 
-  publish:
-    name: 'Publish Metrics'
-    runs-on: ubuntu-latest
-    container: dxatscale/sfpowerscripts
+        steps:
+            - name: 'Authenticate Dev Hub'
+              run: |
+                  echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
+                  sfdx auth:sfdxurl:store -f authfile -a devhub
 
-    steps:
-    
-      - name: 'Authenticate Dev Hub'
-        run: |
-          echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
-          sfdx auth:sfdxurl:store -f authfile -a devhub
-
-      - name: 'Publish metrics'
-        run: sfdx sfpowerscripts:pool:metrics:publish -v devhub
+            - name: 'Publish metrics'
+              run: sfdx sfpowerscripts:pool:metrics:publish -v devhub

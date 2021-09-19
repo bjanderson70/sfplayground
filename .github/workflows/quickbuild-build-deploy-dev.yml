@@ -45,7 +45,7 @@ jobs:
                   path: artifacts
 
     deploy:
-        name: 'Deploy to Dev'
+        name: 'Deploy to Integration Org'
         runs-on: ubuntu-latest
         container: dxatscale/sfpowerscripts
         needs: quickbuild
@@ -68,12 +68,12 @@ jobs:
                   echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
                   sfdx auth:sfdxurl:store -f authfile -a devhub
 
-            - name: Authenticate to DEV sandbox
+            - name: Authenticate to Integration sandbox
               run: |
                   echo "${{ secrets.DEV_SFDX_AUTH_URL }}" > ./dev_authfile
                   sfdx auth:sfdxurl:store -f ./dev_authfile -a dev
 
-            - name: 'Deploy to DEV'
+            - name: 'Deploy to Integration Sandbox'
               run: |
                   sfdx sfpowerkit:package:dependencies:install -u dev -v devhub -w 300 -r
                   sfdx sfpowerscripts:orchestrator:deploy -u dev  --skipifalreadyinstalled -g "::group::,::endgroup::"
@@ -84,7 +84,7 @@ jobs:
         container: dxatscale/sfpowerscripts
         needs: deploy
         concurrency: build
-        if: github.ref == 'refs/heads/develop' || 'refs/heads/userstory/*'
+        if: github.ref == 'refs/heads/develop'
         steps:
             - uses: actions/checkout@v2
               with:

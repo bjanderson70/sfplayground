@@ -1,47 +1,37 @@
-# DX@Scale CI/CD Template for GitHub
+#
 #----------------------------------------------------------------------------------------------------
-# Maintained by @aly76 for DX@Scale
-# Follows reference pipeline available at docs.dxatscale.io
-# 
+# Maintained by
 #-----------------------------------------------------------------------------------------------------
-# To know more about dxatscale, visit https://docs.dxatscale.io
-# To know more on sfpowerscripts, visit- https://sfpowerscripts.dxatscale.io/
-# To know more on sfpowerkit, visit- https://github.com/Accenture/sfpowerkit
 
 # Return an used scratch org back to the pool for replenishment
 
 name: 'Scratch Org Recycler - User Triggered'
 
 on:
-  workflow_dispatch:
-    inputs:
-      username:
-        description: "Username of the scratch org"
-        required: true
-
-
+    workflow_dispatch:
+        inputs:
+            username:
+                description: 'Username of the scratch org'
+                required: true
 
 #Set the environment variables for tracking metrics
 env:
-  SFPOWERSCRIPTS_STATSD: 'true'
-  SFPOWERSCRIPTS_STATSD_HOST: '127.0.0.1' 
-  SFPOWERSCRIPTS_STATSD_PORT: '8125' 
-  SFPOWERSCRIPTS_STATSD_PROTOCOL: 'UDP'
+    SFPOWERSCRIPTS_STATSD: 'true'
+    SFPOWERSCRIPTS_STATSD_HOST: '127.0.0.1'
+    SFPOWERSCRIPTS_STATSD_PORT: '8125'
+    SFPOWERSCRIPTS_STATSD_PROTOCOL: 'UDP'
 
 jobs:
+    delete-scratchorg:
+        name: 'Return a used scratch org to the pool ${{ github.event.inputs.username }}'
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
 
-  delete-scracthorg:
-    name: 'Return a used scratch org to the pool ${{ github.event.inputs.username }}'
-    runs-on: ubuntu-latest
-    container: dxatscale/sfpowerscripts
+        steps:
+            - name: 'Authenticate Dev Hub'
+              run: |
+                  echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
+                  sfdx auth:sfdxurl:store -f authfile -a devhub
 
-    steps:
-
-
-      - name: 'Authenticate Dev Hub'
-        run: |
-          echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
-          sfdx auth:sfdxurl:store -f authfile -a devhub
-
-      - name: 'Delete scratch org ${{ github.event.inputs.username }}'
-        run: 'sfdx sfpowerscripts:pool:org:delete -u ${{ github.event.inputs.username }} -v devhub'
+            - name: 'Delete scratch org ${{ github.event.inputs.username }}'
+              run: 'sfdx sfpowerscripts:pool:org:delete -u ${{ github.event.inputs.username }} -v devhub'

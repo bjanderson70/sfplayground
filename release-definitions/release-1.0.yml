@@ -1,0 +1,17 @@
+release: "Release-1.0"
+skipIfAlreadyInstalled: true
+artifacts:
+  #src-env-specific-alias-pre: main
+  core-crm: main
+  #src-ui: main
+  #src-access-management: main
+  #src-env-specific-alias-post: main
+changelog:
+  workItemFilter: "issues/[0-9]+"
+  #The URL of the version control system to push changelog files
+  ####repoUrl: "https://github.com/myorg/myrepo.git"
+  # The generic URL of work items, to which to append work item codes. 
+  # Allows easy redirection to user stories by clicking on the work-item link in the changelog.
+  ####workItemUrl: "https://www.atlassian.com/software/jira"
+  # Limit the number of releases to display in the changelog markdown
+  limit: 30

@@ -1,84 +1,75 @@
-# DX@Scale CI/CD Template for GitHub
+#
 #----------------------------------------------------------------------------------------------------
-# Maintained by @aly76 for DX@Scale
-# Follows reference pipeline available at docs.dxatscale.io
-# 
+# Maintained by
 #-----------------------------------------------------------------------------------------------------
-# To know more about dxatscale, visit https://docs.dxatscale.io
-# To know more on sfpowerscripts, visit- https://sfpowerscripts.dxatscale.io/
-# To know more on sfpowerkit, visit- https://github.com/Accenture/sfpowerkit
-
 
 # This pipeline is used to validate an incoming change using a dev environment fetched from the CI pool
 
 name: 'PR Validation - Auto Triggered'
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - main
-      - release/**
+    pull_request:
+        types: [opened, synchronize, reopened]
+        branches:
+            - main
+            - release/**
 
-
-  workflow_dispatch:
+    workflow_dispatch:
 
 #Set the environment variables for tracking metrics
 env:
-  SFPOWERSCRIPTS_STATSD: 'true'
-  SFPOWERSCRIPTS_STATSD_HOST: '127.0.0.1' 
-  SFPOWERSCRIPTS_STATSD_PORT: '8125' 
-  SFPOWERSCRIPTS_STATSD_PROTOCOL: 'UDP'
+    SFPOWERSCRIPTS_STATSD: 'true'
+    SFPOWERSCRIPTS_STATSD_HOST: '127.0.0.1'
+    SFPOWERSCRIPTS_STATSD_PORT: '8125'
+    SFPOWERSCRIPTS_STATSD_PROTOCOL: 'UDP'
 
 jobs:
-  validate:
-    name: 'Validate Changed Packages'
-    runs-on: ubuntu-latest
-    container: dxatscale/sfpowerscripts
+    validate:
+        name: 'Validate Changed Packages'
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
 
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
 
-      - run: |
-          echo 'y' | sfdx plugins:install @dxatscale/sfpowerscripts@alpha
+            - run: |
+                  echo 'y' | sfdx plugins:install @dxatscale/sfpowerscripts@alpha
 
-      - name: 'Authenticate Dev Hub'
-        run: |
-          echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
-          sfdx auth:sfdxurl:store -f authfile -a devhub
+            - name: 'Authenticate Dev Hub'
+              run: |
+                  echo "${{ secrets.DEVHUB_SFDX_AUTH_URL }}" > ./authfile
+                  sfdx auth:sfdxurl:store -f authfile -a devhub
 
+            # Validate source and trigger test
+            - name: 'Push source to scratch org'
+              run: 'sfdx sfpowerscripts:orchestrator:validate -p ci -v devhub -x'
 
+    static:
+        name: 'static-analysis-of-Apex-classes-using-PMD'
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
 
-      # Validate source and trigger test
-      - name: 'Push source to scratch org'
-        run: 'sfdx sfpowerscripts:orchestrator:validate -p ci -v devhub -x'
+            - name: 'Run PMD static code analysis'
+              shell: bash
+              run: |
+                  sfdx sfpowerscripts:analyze:pmd -b --sourcedir=src/core-crm -o core-crm-pmd-output
 
-  static:
-    name: 'static-analysis-of-Apex-classes-using-PMD'
-    runs-on: ubuntu-latest
-    container: dxatscale/sfpowerscripts
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+    validate-package-coverage:
+        name: 'validate metadata coverage for unlocked packages'
+        runs-on: ubuntu-latest
+        container: dxatscale/sfpowerscripts
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
 
-      - name: "Run PMD static code analysis"
-        shell: bash
-        run: |
-          sfdx sfpowerscripts:analyze:pmd -b --sourcedir=src/core-crm -o core-crm-pmd-output
-
-  validate-package-coverage:
-    name: 'validate metadata coverage for unlocked packages'
-    runs-on: ubuntu-latest
-    container: dxatscale/sfpowerscripts
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: "validate metadata coverage"
-        shell: bash
-        run: |
-          sfdx sfpowerkit:package:valid -n core-crm -b StandardValueSet
+            - name: 'validate metadata coverage'
+              shell: bash
+              run: |
+                  sfdx sfpowerkit:package:valid -n core-crm -b StandardValueSet
