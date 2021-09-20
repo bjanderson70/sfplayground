@@ -32,13 +32,13 @@
  * @description       : User Context
  * @author            : Bill Anderson
  * @group             : Utilities
- * @last modified on  : 09-15-2021
+ * @last modified on  : 09-20-2021
  * @last modified by  : Bill Anderson
  * Modifications Log
  * Ver   Date         Author          Modification
  * 1.0   07-31-2021   Bill Anderson   Initial Version
  **/
-@SuppressWarnings('sf:TooManyMethods')
+@SuppressWarnings('PMD.ClassNamingConventions,sf:TooManyMethods')
 public virtual inherited sharing class util_UserContext implements util_IUserContext {
 
     //////////////////////////////////////////////////

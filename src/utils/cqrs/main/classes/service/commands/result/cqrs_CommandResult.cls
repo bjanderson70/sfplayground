@@ -32,12 +32,13 @@
  * @description       : Command Result
  * @author            : Bill Anderson
  * @group             : CQRS
- * @last modified on  : 08-03-2021
+ * @last modified on  : 09-20-2021
  * @last modified by  : Bill Anderson
  * Modifications Log
  * Ver   Date         Author          Modification
  * 1.0   07-31-2021   Bill Anderson   Initial Version
  **/
+@SuppressWarnings('PMD.ClassNamingConventions')
 public virtual inherited sharing class cqrs_CommandResult extends cqrs_Result implements cqrs_ICommandResult {
 
     ////////////////////////////////////////

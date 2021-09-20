@@ -7,6 +7,9 @@ src-env-specific-alias-post/**
 src-env-specific-alias-pre/**
 src-env-specific-pre/**
 src-env-specific/**
+src-ui/README.md
+src-env-specific-alias-post/README.md
+src-temp/README.md
 README.md
 
 **appMenu

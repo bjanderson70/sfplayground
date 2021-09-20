@@ -32,12 +32,13 @@
  * @description       : Customer Service
  * @author            : Bill Anderson
  * @group             : Sample
- * @last modified on  : 09-09-2021
+ * @last modified on  : 09-20-2021
  * @last modified by  : Bill Anderson
  * Modifications Log
  * Ver   Date         Author          Modification
  * 1.0   08-03-2021   Bill Anderson   Initial Version
  **/
+@SuppressWarnings('PMD.ClassNamingConventions')
 public virtual inherited sharing class cqrs_CustomerService extends cqrs_BaseService {
 
     /////////////////////////////////////////////////////////
