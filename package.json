@@ -1,0 +1,23 @@
+{
+    "name": "sf-playground",
+    "private": true,
+    "version": "0.9.0",
+    "description": "SF Playground",
+    "scripts": {
+        "apexdocs": "apexdocs-generate -c apexDocsConfig.json -o false -t docs/sfplayground.wiki -p global public private protected namespaceaccessible -s src/utils/cqrs/main/classes &&  rm docs/sfplayground.wiki/index.md"
+    },
+    "author": "Bill Anderson",
+    "license": "BSD 3-Clause",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bjanderson70/cqrs/"
+    },
+    "engines": {
+        "node": ">= 10.13.0",
+        "npm": ">= 6.5.0"
+    },
+    "devDependencies": {
+        "@cparra/apexdocs": "^1.11.0",
+        "semver": "^7.3.4"
+    }
+}

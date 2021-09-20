@@ -1,0 +1,11 @@
+{
+    "root": "https://github.com/bjanderson70/cqrs/wiki",
+    "sourceLanguage": "java",
+    "content": {
+        "startingHeadingLevel": 1,
+        "includeDate": true,
+        "startingHeadingLevel": 1,
+        "includeAuthor": true,
+        "includeDate": true
+    }
+}
