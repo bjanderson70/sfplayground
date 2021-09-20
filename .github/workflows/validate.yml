@@ -35,7 +35,7 @@ jobs:
                   fetch-depth: 0
 
             - run: |
-                  echo 'y' | sfdx plugins:install @dxatscale/sfpowerscripts@alpha
+                  echo 'y' | sfdx plugins:install @dxatscale/sfpowerscripts
 
             - name: 'Authenticate Dev Hub'
               run: |
